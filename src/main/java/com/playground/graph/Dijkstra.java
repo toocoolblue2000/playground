@@ -44,6 +44,7 @@ public class Dijkstra {
         graph.addNode(nodeF);
 
         graph = calculateShortestPath(graph, nodeA);
+        System.out.println(graph);
     }
 
 

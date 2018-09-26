@@ -1,103 +1,99 @@
+import java.io.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class Solution {
-
-    public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        int n = scanner.nextInt();
-        int m = scanner.nextInt();
-        Map<Integer, GraphNode> map = new HashMap<>();
-        for (int i = 0; i < m; i++) {
-            int x = scanner.nextInt();
-            int y = scanner.nextInt();
-            GraphNode node1 = map.getOrDefault(x, new GraphNode(x));
-            GraphNode node2 = map.getOrDefault(y, new GraphNode(y));
-            node1.addAdjacentNodes(node2);
-            node2.addAdjacentNodes(node1);
-            map.put(x, node1);
-            map.put(y, node2);
-        }
-
-        LinkedHashMap<Integer, GraphNode> sortedMap =
-                map.entrySet().stream().
-                        sorted(Map.Entry.comparingByValue()).
-                        collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue,
-                                (e1, e2) -> e1, LinkedHashMap::new));
-
-        List<Integer> citiesRoute = new ArrayList<>();
-        GraphNode node = null;
-        for (Map.Entry<Integer, GraphNode> entry : sortedMap.entrySet()) {
-            if (entry.getValue().getAdjacentNodes().size() > 1) {
-                node = entry.getValue();
-                break;
-            }
-        }
-
-        while (node != null) {
-            citiesRoute.add(node.getCity());
-            sortedMap.remove(node);
-            for (Map.Entry<Integer, GraphNode> entry : sortedMap.entrySet()) {
-                entry.getValue().removeAdjacentNodes(node);
-            }
-            if (!node.getAdjacentNodes().isEmpty()) {
-                node = node.getAdjacentNodes().toArray(new GraphNode[0])[0];
-            } else {
-                node = null;
-            }
-        }
-        System.out.println(citiesRoute.size());
-        for (Integer i: citiesRoute) {
-            System.out.print(i + " ");
-        }
+class Node {
+    Node(int nodeId) {
+        this.nodeId = nodeId;
     }
+    int nodeId;
+    Set<Node> connectedNodes = new HashSet<>();
 }
 
-class GraphNode implements Comparable<GraphNode> {
-    private int city;
-    private Set<GraphNode> adjacentNodes = new HashSet<>();
+public class Solution {
 
-    public GraphNode(int city) {
-        this.city = city;
-    }
+    // Complete the roadsAndLibraries function below.
+    static long roadsAndLibraries(int n, int c_lib, int c_road, int[][] cities) {
+        if (c_lib <= c_road) {
+            return n * c_lib;
+        }
+        final int roadsPerLibrary = c_lib / c_road;
+        Map<Integer, Node> nodesMap = new HashMap<>();
+        List<Node> allNodes = new ArrayList<>();
+        Set<Node> hasLibrary = new HashSet<>();
+        Set<Node> hasRoadAccess = new HashSet<>();
 
-    public int getCity() {
-        return city;
-    }
+        for (int i = 1; i <= n; i++) {
+            nodesMap.put(i, new Node(i));
+        }
+        for (int[] road : cities) {
+            Node city1 = nodesMap.get(road[0]);
+            Node city2 = nodesMap.get(road[1]);
+            city1.connectedNodes.add(city2);
+            city2.connectedNodes.add(city1);
+        }
+        allNodes.addAll(nodesMap.values());
+        Collections.sort(allNodes, Comparator.comparingInt(o -> o.connectedNodes.size()));
 
-    public void setCity(int city) {
-        this.city = city;
-    }
+        int roads = 0;
 
-    public Set<GraphNode> getAdjacentNodes() {
-        return adjacentNodes;
-    }
-
-    public void addAdjacentNodes(GraphNode adjacentNode) {
-        this.adjacentNodes.add(adjacentNode);
-    }
-
-    public void removeAdjacentNodes(GraphNode adjacentNode) {
-        this.adjacentNodes.remove(adjacentNode);
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        return (obj instanceof GraphNode) && this.city == ((GraphNode)obj).city;
-    }
-
-    @Override
-    public int compareTo(GraphNode node) {
-        if (this == node) {
-            return 0;
-        } else if (this.getAdjacentNodes().size() < node.getAdjacentNodes().size()) {
-            return -1;
-        } else if (this.getAdjacentNodes().size() == node.getAdjacentNodes().size()) {
-            return 0;
-        } else if (this.getAdjacentNodes().size() > node.getAdjacentNodes().size()) {
-            return 1;
+        while (!allNodes.isEmpty()) {
+            Node node = allNodes.remove(0);
+            hasLibrary.add(node);
+            int rpl = roadsPerLibrary;
+            Queue<Node> queue = new LinkedList<>();
+            do {
+                for (Node connectedNode : node.connectedNodes) {
+                    if (hasLibrary.contains(connectedNode) || hasRoadAccess.contains(connectedNode)) {
+                        continue;
+                    }
+                    queue.offer(connectedNode);
+                    hasRoadAccess.add(connectedNode);
+                    allNodes.remove(connectedNode);
+                    roads++;
+                }
+            } while (rpl-->0 && !queue.isEmpty());
         }
 
-        return 0;
+
+        return (hasLibrary.size() * c_lib) + (roads * c_road);
+    }
+
+    private static final Scanner scanner = new Scanner(System.in);
+
+    public static void main(String[] args) throws IOException {
+
+        int q = scanner.nextInt();
+        scanner.skip("(\r\n|[\n\r\u2028\u2029\u0085])?");
+
+        for (int qItr = 0; qItr < q; qItr++) {
+            String[] nmC_libC_road = scanner.nextLine().split(" ");
+
+            int n = Integer.parseInt(nmC_libC_road[0]);
+
+            int m = Integer.parseInt(nmC_libC_road[1]);
+
+            int c_lib = Integer.parseInt(nmC_libC_road[2]);
+
+            int c_road = Integer.parseInt(nmC_libC_road[3]);
+
+            int[][] cities = new int[m][2];
+
+            for (int i = 0; i < m; i++) {
+                String[] citiesRowItems = scanner.nextLine().split(" ");
+                scanner.skip("(\r\n|[\n\r\u2028\u2029\u0085])?");
+
+                for (int j = 0; j < 2; j++) {
+                    int citiesItem = Integer.parseInt(citiesRowItems[j]);
+                    cities[i][j] = citiesItem;
+                }
+            }
+
+            long result = roadsAndLibraries(n, c_lib, c_road, cities);
+
+            System.out.println(String.valueOf(result));
+        }
+
+        scanner.close();
     }
 }
