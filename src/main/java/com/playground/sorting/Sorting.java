@@ -7,6 +7,9 @@ public class Sorting {
         long[] elements = {9, 5, 61, 3, 65, 8, 3, 5, 7, 9, 3, 42, 556, 567, 57, 8, 23, 3, 7, 1};
         mergeSort(elements);
         System.out.println(Arrays.toString(elements));
+        elements = new long[]{9, 5, 61, 3, 65, 8, 3, 5, 7, 9, 3, 42, 556, 567, 57, 8, 23, 3, 7, 1};
+        quickSort(elements);
+        System.out.println(Arrays.toString(elements));
     }
 
     public static void mergeSort(long[] elements) {
@@ -45,7 +48,7 @@ public class Sorting {
 
 
     public static void quickSort(long[] elements) {
-        if (elements == null || elements.length == 0) {
+        if (elements == null || elements.length < 2) {
             return;
         }
         quickSort(elements, 0, elements.length - 1);

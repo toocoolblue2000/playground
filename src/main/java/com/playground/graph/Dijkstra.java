@@ -1,13 +1,4 @@
-package com.playground.graph;/*
- * Copyright 2016-17 by Cisco Systems
- * All rights reserved.
- * This software is the confidential and proprietary information
- * of Cisco Systems,  ("Confidential Information").  You
- * shall not disclose such Confidential Information and shall use
- * it only in accordance with the terms of the license agreement
- * you entered into with Cisco Systems.
- */
-
+package com.playground.graph;
 import java.util.*;
 
 //https://www.baeldung.com/java-dijkstra

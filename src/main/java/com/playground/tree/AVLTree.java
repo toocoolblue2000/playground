@@ -41,10 +41,6 @@ public class AVLTree {
         return y;
     }
 
-    private int getHeightDiff(AVLNode node) {
-        return node.left.height - node.right.height;
-    }
-
     public AVLNode insert(AVLNode root, int nodeId) {
         if (root == null) {
             return new AVLNode(nodeId);
@@ -59,24 +55,62 @@ public class AVLTree {
         }
 
         root.height = Math.max(root.right.height, root.left.height) + 1;
-        int heightDiff = getHeightDiff(root);
+        int heightDiff = root.left.height - root.right.height;
 
-        //left left
+        /*
+         left left
+
+                 z                                      y
+                / \                                   /   \
+               y   T4      Rotate Right (root)       x      z
+              / \          - - - - - - - - ->      /  \    /  \
+             x   T3                               T1  T2  T3  T4
+            / \
+          T1   T2
+        */
         if (heightDiff > 1 && nodeId < root.left.nodeId) {
             return rotateRight(root);
         }
 
-        //right right
+        /*
+        right right
+
+          z                                    y
+         /  \                                /   \
+        T1   y     Rotate Left (root)       z      x
+            /  \   - - - - - - - - - ->    / \    / \
+           T2   x                         T1  T2 T3  T4
+               / \
+             T3  T4
+        */
         if (heightDiff < -1 && nodeId > root.right.nodeId) {
             return rotateLeft(root);
         }
 
-        //left right
+        /*
+        left right
+             z                               z                              x
+            / \                            /   \                           /  \
+           y   T4  Rotate Left (y)        x    T4  Rotate Right(root)    y      z
+          / \      - - - - - - - - ->    /  \      - - - - - - - ->     / \    / \
+        T1   x                          y    T3                       T1  T2 T3  T4
+            / \                        / \
+          T2   T3                    T1   T2
+        */
         if (heightDiff > 1 && nodeId > root.left.nodeId) {
             root.left = rotateLeft(root.left);
             return rotateRight(root);
         }
-        //right left
+
+        /*right left
+               z                            z                                 x
+              / \                          / \                               /  \
+            T1   y   Rotate Right (y)    T1   x      Left Rotate(root)     z      y
+                / \  - - - - - - - - ->     /  \   - - - - - - - - - - >  / \    / \
+               x   T4                      T2   y                        T1  T2  T3  T4
+              / \                              /  \
+            T2   T3                           T3   T4
+         */
         if (heightDiff < -1 && nodeId < root.right.nodeId) {
             root.right = rotateRight(root.right);
             return rotateLeft(root);
