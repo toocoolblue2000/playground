@@ -1,4 +1,4 @@
-package com.playground.graph;
+package com.playground.tree.graph;
 
 import java.awt.*;
 import java.util.Arrays;

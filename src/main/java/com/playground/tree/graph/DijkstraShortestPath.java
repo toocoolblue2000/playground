@@ -1,8 +1,8 @@
-package com.playground.graph;
+package com.playground.tree.graph;
 import java.util.*;
 
 //https://www.baeldung.com/java-dijkstra
-public class Dijkstra {
+public class DijkstraShortestPath {
 
     public static void main(String[] args) {
         WeightedNode nodeA = new WeightedNode("A");

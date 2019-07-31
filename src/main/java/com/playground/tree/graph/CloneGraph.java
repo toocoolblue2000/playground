@@ -7,7 +7,7 @@
  * it only in accordance with the terms of the license agreement
  * you entered into with Cisco Systems.
  */
-package com.playground.graph;
+package com.playground.tree.graph;
 
 import java.util.*;
 
