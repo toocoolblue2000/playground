@@ -1,4 +1,4 @@
-package com.playground.math;
+package com.playground.arrays;
 
 public class CombinationSumIV {
     public static int combinationSum4(int[] nums, int target) {

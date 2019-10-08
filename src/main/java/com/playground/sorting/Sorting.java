@@ -12,8 +12,16 @@ public class Sorting {
         System.out.println(Arrays.toString(elements));
     }
 
+    /*
+    Time complexity:
+        Best: O(n log(n))
+        Average: O(n log(n))
+        Worst: O(n log(n))
+    Space Complexity:
+        O(n)
+     */
     public static void mergeSort(long[] elements) {
-        if (elements.length < 2) {
+        if (elements.length < 2) { //array with single element is returned
             return;
         }
         int mid = elements.length / 2;
@@ -46,9 +54,16 @@ public class Sorting {
         }
     }
 
-
+    /*
+        Time complexity:
+            Best: O(n log(n))
+            Average: O(n log(n))
+            Worst: O(n^2)
+        Space Complexity:
+            O(log n)
+     */
     public static void quickSort(long[] elements) {
-        if (elements == null || elements.length < 2) {
+        if (elements == null || elements.length < 2) {//array with null or single element is returned
             return;
         }
         quickSort(elements, 0, elements.length - 1);

@@ -1,15 +1,4 @@
-/*
- * Copyright 2016-17 by Cisco Systems
- * All rights reserved.
- * This software is the confidential and proprietary information
- * of Cisco Systems,  ("Confidential Information").  You
- * shall not disclose such Confidential Information and shall use
- * it only in accordance with the terms of the license agreement
- * you entered into with Cisco Systems.
- */
 package com.playground.tree;
-
-import java.util.LinkedList;
 
 class LinkedNode {
     public LinkedNode(int value) {
@@ -34,7 +23,9 @@ public class LinkedListToBinaryTree {
             length++;
         }
         Node node = sortedLinkedListToBST(head, length);
-        System.out.println(node);
+        StringBuilder buf = new StringBuilder();
+        node.print(buf, "", "");
+        System.out.println(buf);
     }
 
     private static Node sortedLinkedListToBST(LinkedNode head, int length){

@@ -1,5 +1,6 @@
 package com.playground.tree.graph;
 import java.util.*;
+import java.util.stream.Collectors;
 
 //https://www.baeldung.com/java-dijkstra
 public class DijkstraShortestPath {
@@ -95,6 +96,11 @@ class Graph {
     public void addNode(WeightedNode node) {
         nodes.add(node);
     }
+
+    @Override
+    public String toString() {
+        return String.format("Graph{ %s }", Arrays.deepToString(nodes.toArray()));
+    }
 }
 
 class WeightedNode {
@@ -141,5 +147,10 @@ class WeightedNode {
 
     public void setAdjacentNodes(Map<WeightedNode, Integer> adjacentNodes) {
         this.adjacentNodes = adjacentNodes;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("Node :%s :: Distance: %d ::, shortest path %s", name, distance, shortestPath.stream().map(a -> a.name).collect(Collectors.toList())) + "\n";
     }
 }

@@ -1,16 +1,40 @@
-/*
- * Copyright 2016-17 by Cisco Systems
- * All rights reserved.
- * This software is the confidential and proprietary information
- * of Cisco Systems,  ("Confidential Information").  You
- * shall not disclose such Confidential Information and shall use
- * it only in accordance with the terms of the license agreement
- * you entered into with Cisco Systems.
- */
 package com.playground.tree;
 
 import java.util.*;
 
+/*
+The member states of the UN are planning to send  people to the moon. They want them to be from different countries. You will be given a list of pairs of astronaut ID's. Each pair is made of astronauts from the same country. Determine how many pairs of astronauts from different countries they can choose from.
+
+For example, we have the following data on 2 pairs of astronauts, and 4 astronauts total, numbered  through .
+
+1   2
+2   3
+Astronauts by country are [0] and [1,2,3]. There are  pairs to choose from: [0,1] [0,2] [0,3] and [0,4].
+
+Function Description
+
+Complete the journeyToMoon function in the editor below. It should return an integer that represents the number of valid pairs that can be formed.
+
+journeyToMoon has the following parameter(s):
+
+n: an integer that denotes the number of astronauts
+astronaut: a 2D array where each element  is a  element integer array that represents the ID's of two astronauts from the same country
+
+Input Format:
+The first line contains two integers  and , the number of astronauts and the number of pairs.
+Each of the next  lines contains  space-separated integers denoting astronaut ID's of two who share the same nationality.
+
+Constraints:
+1 <= n <= 10^5
+1 <= p <= 10^4
+
+Output Format
+An integer that denotes the number of ways to choose a pair of astronauts from different coutries.
+
+Solution:
+Breadth first search
+Disjoint set
+ */
 public class AstronautToMoon {
 
     static class Astronaut {
@@ -55,9 +79,10 @@ public class AstronautToMoon {
 
         long out = 0;
         int sum = 0;
-        for (int i = 0; i < astrosByCountry.size(); i++) {
-            out += sum * (astrosByCountry.get(i).size());
-            sum += astrosByCountry.get(i).size();
+
+        for (Set<Astronaut> astros : astrosByCountry) {
+            out += sum * astros.size();
+            sum += astros.size();
         }
 
         return out;

@@ -1,20 +1,12 @@
-package com.playground.tree;/*
- * Copyright 2016-17 by Cisco Systems
- * All rights reserved.
- * This software is the confidential and proprietary information
- * of Cisco Systems,  ("Confidential Information").  You
- * shall not disclose such Confidential Information and shall use
- * it only in accordance with the terms of the license agreement
- * you entered into with Cisco Systems.
- */
-
-import java.util.LinkedList;
-import java.util.Queue;
+package com.playground.tree;import java.util.*;
 
 public class TreeTraversal {
 
     public static void main(String[] args) {
-        Node root = createBST(new int[]{4,67,79,3,2,56,69,33,1,34,65,7,8});
+        Node root = createBinarySearchTree(new int[]{4,67,79,3,2,56,69,33,1,34,65,7,8});
+        StringBuilder buffer = new StringBuilder();
+        root.print(buffer, "", "");
+        System.out.println(buffer);
         System.out.println("\npreOrder:  ");
         preOrder(root);
         System.out.println("\ninOrder:   ");
@@ -23,27 +15,29 @@ public class TreeTraversal {
         postOrder(root);
         System.out.println("\nlevelOrder:");
         levelOrder(root);
+        System.out.println("\nBreadth First search:");
+        breadthFirstSearch(root, 56);
         System.out.println("\nmaxDepth:" + maxDepth(root));
         System.out.println("getLevelOfNode:" + getLevelOfNode(root, 33, 0));
 
     }
 
-    private static Node createBST(int[] ints) {
+    private static Node createBinarySearchTree(int[] ints) {
         Node root = null;
         for (int i = 0; i < ints.length; i++) {
-            root = createBST(root, ints[i]);
+            root = createBinarySearchTree(root, ints[i]);
         }
         return root;
     }
 
-    private static Node createBST(Node root, int val) {
+    private static Node createBinarySearchTree(Node root, int val) {
         if (root == null) {
             return new Node(val);
         } else {
             if (val <= root.nodeId) {
-                root.left = createBST(root.left, val);
+                root.left = createBinarySearchTree(root.left, val);
             } else if (root.nodeId < val) {
-                root.right = createBST(root.right, val);
+                root.right = createBinarySearchTree(root.right, val);
             }
         }
         return root;
@@ -127,13 +121,59 @@ public class TreeTraversal {
 
         return result;
     }
+
+    private static Node breadthFirstSearch(Node root, int valueToFind) {
+        if (root == null) {
+            return null;
+        }
+        Queue<Node> queue = new LinkedList<>();
+        queue.offer(root);
+
+        while(!queue.isEmpty()) {
+            Node polled = queue.poll();
+            System.out.println("checking " + polled.nodeId);
+            if (polled.nodeId == valueToFind) {
+                System.out.println("Found " + polled.nodeId);
+                return polled;
+            }
+            if (!polled.getChildren().isEmpty()) {
+                polled.children.forEach(queue::offer);
+            }
+        }
+        return null;
+    }
 }
 
 class Node {
     int nodeId;
     Node left;
     Node right;
+    List<Node> children = new ArrayList<>(2);
+
     public Node (int nodeId) {
         this.nodeId = nodeId;
+    }
+    public List<Node> getChildren() {
+        if (left != null && !children.contains(left)) {
+            children.add(left);
+        }
+        if (right != null && !children.contains(right)) {
+            children.add(right);
+        }
+        return children;
+    }
+
+    public void print(StringBuilder buffer, String prefix, String childrenPrefix) {
+        buffer.append(prefix);
+        buffer.append(nodeId);
+        buffer.append('\n');
+        for (Iterator<Node> it = getChildren().iterator(); it.hasNext();) {
+            Node next = it.next();
+            if (it.hasNext()) {
+                next.print(buffer, childrenPrefix + "├── ", childrenPrefix + "│   ");
+            } else {
+                next.print(buffer, childrenPrefix + "└── ", childrenPrefix + "    ");
+            }
+        }
     }
 }

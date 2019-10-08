@@ -1,16 +1,11 @@
-/*
- * Copyright 2016-17 by Cisco Systems
- * All rights reserved.
- * This software is the confidential and proprietary information
- * of Cisco Systems,  ("Confidential Information").  You
- * shall not disclose such Confidential Information and shall use
- * it only in accordance with the terms of the license agreement
- * you entered into with Cisco Systems.
- */
 package com.playground.tree.graph;
 
 import java.util.*;
+/*
 
+Approach: breadth first search
+maintain a map to keep a map of explored nodes
+ */
 public class CloneGraph {
 
 
@@ -23,7 +18,8 @@ public class CloneGraph {
         g1.neighbours.add(g3);g3.neighbours.add(g1);
         g2.neighbours.add(g2);
         g3.neighbours.add(g4);g4.neighbours.add(g3);
-        cloneGraph(g1);
+        GraphNode clone = cloneGraph(g1);
+        System.out.println(clone);
     }
 
     // returns the reference of new cloned source node
