@@ -19,7 +19,18 @@ public class TreeTraversal {
         breadthFirstSearch(root, 56);
         System.out.println("\nmaxDepth:" + maxDepth(root));
         System.out.println("getLevelOfNode:" + getLevelOfNode(root, 33, 0));
+        System.out.println("isValidBST :" + isValidBST(root));
 
+        Node node = new Node(5);
+        node.left = new Node(1);
+        Node right = new Node(4);
+        right.left = new Node(3);
+        right.right = new Node(6);
+        node.right = right;
+        buffer = new StringBuilder();
+        node.print(buffer, "", "");
+        System.out.println(buffer);
+        System.out.println("isValidBST :" + isValidBST(root));
     }
 
     private static Node createBinarySearchTree(int[] ints) {
@@ -141,6 +152,24 @@ public class TreeTraversal {
             }
         }
         return null;
+    }
+
+    public static boolean isValidBST(Node root) {
+        return isValidBST(root, null, null);
+    }
+
+    private static boolean isValidBST(Node root, Integer lowerLimit, Integer upperLimit) {
+        if (root == null) {
+            return true;
+        }
+        if ((lowerLimit != null && root.nodeId <= lowerLimit) || (upperLimit != null && root.nodeId >= upperLimit)) {
+            return false;
+        }
+        if (root.left != null && root.right != null && root.left.nodeId > root.right.nodeId) {
+            return false;
+        }
+
+        return isValidBST(root.left, lowerLimit, root.nodeId) && isValidBST(root.right, root.nodeId, upperLimit);
     }
 }
 

@@ -1,5 +1,9 @@
 package com.playground.arrays;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 /*
 You are given an n x n 2D matrix representing an image.
@@ -50,15 +54,11 @@ Then we reverse elements of every column.
 2 6 10 14
 1 5  9 13
  */
-public class RotateMatrix {
+public class RotateArrayAndMatrix {
 
     private static void rotate(int[][] array) {
         transpose(array);
-        for (int i = 0; i < array.length / 2; i ++) {
-            int[] temp = array[i];
-            array[i] = array[array.length - 1 - i];
-            array[array.length - 1 - i] = temp;
-        }
+        reverseArray(array, 0, array.length);
     }
 
     private static void transpose(int[][] array) {
@@ -69,6 +69,23 @@ public class RotateMatrix {
                 array[j][i] = temp;
             }
         }
+    }
+
+    private static <T> void reverseArray(T[] t, int start, int end) {
+        while(end > start) {
+            T temp = t[start];
+            t[start] = t[end - 1];
+            t[end - 1] = temp;
+            end--;
+            start++;
+        }
+    }
+
+    private static void rotate(Integer[] nums, int k) {
+        int simplifiedRotation = k % nums.length;
+        reverseArray(nums, 0, nums.length);
+        reverseArray(nums, 0, simplifiedRotation);
+        reverseArray(nums, simplifiedRotation, nums.length);
     }
 
     public static void main(String[] args) {
@@ -98,5 +115,9 @@ public class RotateMatrix {
                 {2,  6, 10, 14},
                 {1,  5,  9, 13}
         });
+
+        Integer[] arr1D = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+        rotate(arr1D, 34);
+        assertArrayEquals(new Integer[]{6, 7, 8, 9, 0, 1, 2, 3, 4, 5}, arr1D);
     }
 }
