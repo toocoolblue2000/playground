@@ -31,6 +31,13 @@ public class TreeTraversal {
         node.print(buffer, "", "");
         System.out.println(buffer);
         System.out.println("isValidBST :" + isValidBST(root));
+
+        Node node1 = new Node(1);
+        node1.left = new Node(7);
+        node1.right = new Node(0);
+        node1.left.left = new Node(7);
+        node1.left.right = new Node(-8);
+        System.out.println(maxLevelSum(node1));
     }
 
     private static Node createBinarySearchTree(int[] ints) {
@@ -131,6 +138,30 @@ public class TreeTraversal {
         result = getLevelOfNode(root.right, key, level + 1);
 
         return result;
+    }
+
+    public static int maxLevelSum(Node root) {
+        maxLevelSum(root, 1);
+        int maxVal = Integer.MIN_VALUE;
+        int level = 0;
+        for (int i : map.keySet()) {
+            if (map.get(i) > maxVal) {
+                maxVal = map.get(i);
+                level = i;
+            }
+        }
+        return level;
+    }
+    private static Map<Integer, Integer> map = new HashMap<>();
+    public static void maxLevelSum(Node rootNode, int level) {
+        if (rootNode == null) {
+            return;
+        }
+
+        map.put(level, map.getOrDefault(level, 0) + rootNode.nodeId);
+
+        maxLevelSum(rootNode.left, level+1);
+        maxLevelSum(rootNode.right, level+1);
     }
 
     private static Node breadthFirstSearch(Node root, int valueToFind) {

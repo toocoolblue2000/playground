@@ -23,7 +23,7 @@ public class NClosestPointsToTheOrigin {
         for (int i = 0; i < points.length; i++) {
             double x = originPoint.getX() - points[i].getX();
             double y = originPoint.getY() - points[i].getY();
-            double distance = Math.sqrt((x * x) + (y * y));
+            double distance = Math.sqrt((x * x) + (y * y)); //Distance between 2 points Sqrt( (x2-x1)^2 + (y2 - y1)^2 )
             indexAndDistanceMap.put(i, distance);
         }
         List<Point> sorted = indexAndDistanceMap.entrySet().stream()

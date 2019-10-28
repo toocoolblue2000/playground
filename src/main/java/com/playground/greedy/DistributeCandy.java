@@ -2,6 +2,8 @@
 package com.playground.greedy;
 
 import java.util.*;
+import java.util.Map.Entry;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -32,9 +34,14 @@ public class DistributeCandy {
         int i = 1;
         int sumCandy = 0;
 
-        for (Map.Entry<Integer, Integer> entry : map.entrySet()) {
+        for (Entry<Integer, Integer> entry : map.entrySet()) {
             sumCandy += entry.getValue() * i++;
         }
+
+        /*LinkedHashMap<Integer, Integer> sortedMap =
+                map.entrySet().stream().
+                        sorted(Entry.comparingByValue()).
+                        collect(Collectors.toMap(Entry::getKey, Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));*/
 
         return sumCandy;
     }
